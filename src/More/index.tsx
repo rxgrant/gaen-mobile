@@ -1,204 +1,90 @@
-import React from "react"
+import React, { FunctionComponent } from "react"
 import {
-  ViewStyle,
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native"
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack"
 import { useTranslation } from "react-i18next"
-import { SvgXml } from "react-native-svg"
-import {
-  NavigationParams,
-  NavigationScreenProp,
-  NavigationState,
-} from "react-navigation"
 
-import { getLocalNames } from "../locales/languages"
-import { RTLEnabledText } from "../components/RTLEnabledText"
-import { NavigationBarWrapper } from "../components/NavigationBarWrapper"
-import { Stacks, Screens, useStatusBarEffect } from "../navigation"
+import MoreMenuScreen from "./Menu"
+import AboutScreen from "./About"
+import LicensesScreen from "./Licenses"
+import ENDebugMenu from "./ENDebugMenu"
+import ENLocalDiagnosisKeyScreen from "./ENLocalDiagnosisKeyScreen"
+import ExposureListDebugScreen from "./ExposureListDebugScreen"
+import LanguageSelection from "./LanguageSelection"
 
-import { Icons } from "../assets"
-import { Buttons, Colors, Spacing, Typography } from "../styles"
+import { Colors } from "../styles"
 
-interface SettingsScreenProps {
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>
+import { Screens } from "../navigation/index"
+
+const Stack = createStackNavigator()
+
+const SCREEN_OPTIONS: StackNavigationOptions = {
+  headerStyle: {
+    backgroundColor: Colors.primaryViolet,
+  },
+  headerTitleStyle: {
+    color: Colors.white,
+    textTransform: "uppercase",
+  },
+  headerBackTitleVisible: false,
+  headerTintColor: Colors.white,
 }
 
-interface LanguageSelectionListItemProps {
-  icon: string
-  iconLabel: string
-  label: string
-  onPress: () => void
+type MoreStackRouteName =
+  | "Settings"
+  | "About"
+  | "Licenses"
+  | "ENDebugMenu"
+  | "LanguageSelection"
+  | "AffectedUserFlow"
+  | "ExposureListDebugScreen"
+  | "ENLocalDiagnosisKey"
+
+interface MoreStackRouteState {
+  index: number
+  key: string
+  routeNames: MoreStackRouteName[]
+  routes: MoreStackRoute[]
+  stale: boolean
+  type: "stack"
 }
-const LanguageSelectionListItem = ({
-  icon,
-  iconLabel,
-  label,
-  onPress,
-}: LanguageSelectionListItemProps) => (
-  <TouchableHighlight
-    underlayColor={Colors.underlayPrimaryBackground}
-    style={styles.listItem}
-    onPress={onPress}
-  >
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <SvgXml
-        xml={icon}
-        accessible
-        accessibilityLabel={iconLabel}
-        style={[styles.icon, { marginRight: Spacing.small }]}
-      />
-      <RTLEnabledText style={{ ...Typography.mainContent }}>
-        {label}
-      </RTLEnabledText>
-    </View>
-  </TouchableHighlight>
-)
 
-const SettingsScreen = ({ navigation }: SettingsScreenProps): JSX.Element => {
-  const {
-    t,
-    i18n: { language: localeCode },
-  } = useTranslation()
-  const languageName = getLocalNames()[localeCode]
-  useStatusBarEffect("light-content")
+export interface MoreStackRoute {
+  key: string
+  name: "More"
+  params: undefined
+  state?: MoreStackRouteState
+}
 
-  const navigateTo = (screen: string) => {
-    return () => navigation.navigate(screen)
-  }
-
-  interface SettingsListItemProps {
-    label: string
-    onPress: () => void
-    description?: string
-    style?: ViewStyle
-  }
-
-  const SettingsListItem = ({
-    label,
-    onPress,
-    description,
-    style,
-  }: SettingsListItemProps) => {
-    return (
-      <TouchableHighlight
-        underlayColor={Colors.underlayPrimaryBackground}
-        style={[styles.listItem, style]}
-        onPress={onPress}
-      >
-        <View>
-          <RTLEnabledText style={styles.listItemText}>{label}</RTLEnabledText>
-          {description ? (
-            <RTLEnabledText style={styles.descriptionText}>
-              {description}
-            </RTLEnabledText>
-          ) : null}
-        </View>
-      </TouchableHighlight>
-    )
-  }
+const MoreStack: FunctionComponent = () => {
+  const { t } = useTranslation()
 
   return (
-    <NavigationBarWrapper
-      title={t("navigation.more")}
-      includeBackButton={false}
-    >
-      <ScrollView style={styles.container}>
-        <View style={styles.sectionPrimary}>
-          <RTLEnabledText>
-            {t("settings.share_test_result_description")}
-          </RTLEnabledText>
-          <TouchableOpacity
-            onPress={navigateTo(Stacks.AffectedUserFlow)}
-            style={styles.button}
-          >
-            <RTLEnabledText style={styles.buttonText}>
-              {t("settings.share_test_result")}
-            </RTLEnabledText>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <LanguageSelectionListItem
-            label={languageName || t("label.unknown")}
-            icon={Icons.LanguagesIcon}
-            iconLabel={t("label.language_icon")}
-            onPress={navigateTo(Screens.LanguageSelection)}
-          />
-        </View>
-
-        <View style={styles.section}>
-          <SettingsListItem
-            label={t("screen_titles.about")}
-            onPress={navigateTo(Screens.About)}
-            style={styles.divider}
-          />
-          <SettingsListItem
-            label={t("screen_titles.legal")}
-            onPress={() => navigation.navigate(Screens.Licenses)}
-            style={styles.lastListItem}
-          />
-        </View>
-        <View style={styles.section}>
-          <SettingsListItem
-            label="EN Debug Menu"
-            onPress={navigateTo(Screens.ENDebugMenu)}
-            style={styles.lastListItem}
-          />
-        </View>
-      </ScrollView>
-    </NavigationBarWrapper>
+    <Stack.Navigator screenOptions={SCREEN_OPTIONS}>
+      <Stack.Screen name={Screens.Menu} component={MoreMenuScreen} />
+      <Stack.Screen name={Screens.About} component={AboutScreen} />
+      <Stack.Screen name={Screens.Licenses} component={LicensesScreen} />
+      <Stack.Screen
+        name={Screens.ENDebugMenu}
+        component={ENDebugMenu}
+        options={{ headerTitle: t("screen_titles.debug") }}
+      />
+      <Stack.Screen
+        name={Screens.LanguageSelection}
+        component={LanguageSelection}
+        options={{ headerTitle: t("screen_titles.select_language") }}
+      />
+      <Stack.Screen
+        name={Screens.ExposureListDebugScreen}
+        component={ExposureListDebugScreen}
+      />
+      <Stack.Screen
+        name={Screens.ENLocalDiagnosisKey}
+        component={ENLocalDiagnosisKeyScreen}
+      />
+    </Stack.Navigator>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.primaryBackground,
-  },
-  divider: {
-    borderColor: Colors.tertiaryViolet,
-    borderBottomWidth: 1,
-  },
-  section: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    marginBottom: Spacing.medium,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: Colors.tertiaryViolet,
-  },
-  sectionPrimary: {
-    flex: 1,
-    margin: Spacing.medium,
-  },
-  button: {
-    ...Buttons.largeSecondaryBlue,
-    marginTop: Spacing.medium,
-  },
-  buttonText: {
-    ...Typography.buttonTextLight,
-  },
-  icon: {
-    maxWidth: Spacing.icon,
-    maxHeight: Spacing.icon,
-  },
-  listItem: {
-    flex: 1,
-    paddingHorizontal: Spacing.small,
-    paddingVertical: Spacing.medium,
-  },
-  listItemText: {
-    ...Typography.tappableListItem,
-  },
-  lastListItem: {
-    borderBottomWidth: 0,
-  },
-  descriptionText: {
-    ...Typography.description,
-  },
-})
-
-export default SettingsScreen
+export default MoreStack

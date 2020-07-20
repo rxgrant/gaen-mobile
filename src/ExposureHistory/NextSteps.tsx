@@ -6,7 +6,6 @@ import { SvgXml } from "react-native-svg"
 import env from "react-native-config"
 
 import { RTLEnabledText } from "../components/RTLEnabledText"
-import { NavigationBarWrapper } from "../components/NavigationBarWrapper"
 import { Screens, useStatusBarEffect } from "../navigation"
 
 import { Buttons, Spacing, Typography } from "../styles"
@@ -20,10 +19,6 @@ const NextSteps = (): JSX.Element => {
   const navigation = useNavigation()
   const { t } = useTranslation()
   useStatusBarEffect("light-content")
-
-  const handleOnBackPress = () => {
-    navigation.goBack()
-  }
 
   const footerText = t("exposure_history.next_steps.ha_self_assessment", {
     healthAuthorityName,
@@ -41,32 +36,28 @@ const NextSteps = (): JSX.Element => {
   }
 
   return (
-    <NavigationBarWrapper title={"Next Steps"} onBackPress={handleOnBackPress}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <RTLEnabledText style={styles.contentText}>
-            {contentTextOne}
-          </RTLEnabledText>
-          <RTLEnabledText style={styles.contentText}>
-            {contentTextTwo}
-          </RTLEnabledText>
-        </View>
-        <View style={styles.buttonContainer}>
-          <RTLEnabledText style={styles.footerText}>
-            {footerText}
-          </RTLEnabledText>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleOnPressTakeAssessment}
-          >
-            <RTLEnabledText style={styles.buttonText}>
-              {buttonText}
-            </RTLEnabledText>
-            <SvgXml xml={Icons.Export} color={Colors.white} />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <RTLEnabledText style={styles.contentText}>
+          {contentTextOne}
+        </RTLEnabledText>
+        <RTLEnabledText style={styles.contentText}>
+          {contentTextTwo}
+        </RTLEnabledText>
       </View>
-    </NavigationBarWrapper>
+      <View style={styles.buttonContainer}>
+        <RTLEnabledText style={styles.footerText}>{footerText}</RTLEnabledText>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleOnPressTakeAssessment}
+        >
+          <RTLEnabledText style={styles.buttonText}>
+            {buttonText}
+          </RTLEnabledText>
+          <SvgXml xml={Icons.Export} color={Colors.white} />
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 
@@ -101,3 +92,4 @@ const styles = StyleSheet.create({
 })
 
 export default NextSteps
+

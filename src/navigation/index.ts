@@ -18,7 +18,7 @@ export type Screen =
   | "ENDebugMenu"
   | "ENLocalDiagnosisKey"
   | "ExposureListDebugScreen"
-  | "Settings"
+  | "Menu"
   | "About"
   | "Licenses"
   | "Welcome"
@@ -44,7 +44,7 @@ export const Screens: { [key in Screen]: Screen } = {
   ENDebugMenu: "ENDebugMenu",
   ENLocalDiagnosisKey: "ENLocalDiagnosisKey",
   ExposureListDebugScreen: "ExposureListDebugScreen",
-  Settings: "Settings",
+  Menu: "Menu",
   About: "About",
   Licenses: "Licenses",
   Welcome: "Welcome",
@@ -70,14 +70,14 @@ export type Stack =
   | "ExposureHistoryFlow"
   | "SelfAssessment"
   | "More"
-  | "AffectedUserFlow"
+  | "AffectedUserStack"
 
 export const Stacks: { [key in Stack]: Stack } = {
   Onboarding: "Onboarding",
   ExposureHistoryFlow: "ExposureHistoryFlow",
   SelfAssessment: "SelfAssessment",
   More: "More",
-  AffectedUserFlow: "AffectedUserFlow",
+  AffectedUserStack: "AffectedUserStack",
 }
 
 type BarStyle = "dark-content" | "light-content"

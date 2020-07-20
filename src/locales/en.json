@@ -376,6 +376,8 @@
     "legal": "Legal",
     "more": "More",
     "exposure_history": "Exposure History",
-    "more_info": "More Info"
+    "more_info": "More Info",
+    "debug": "Debug",
+    "select_language": "Select Language"
   }
 }

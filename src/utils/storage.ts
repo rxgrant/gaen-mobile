@@ -23,7 +23,7 @@ export async function getStoreData(
 
 export async function setStoreData(
   key: string,
-  item: Record<string, string> | string,
+  item: Record<string, string> | string | boolean,
 ): Promise<void> {
   try {
     if (typeof item !== "string") {
@@ -33,5 +33,30 @@ export async function setStoreData(
     return await AsyncStorage.setItem(key, item)
   } catch (error) {
     console.log(error.message)
+  }
+}
+
+const NEW_EXPOSURES = "NEW_EXPOSURES"
+export async function getNewExposuresData(): Promise<boolean> {
+  try {
+    const data = await AsyncStorage.getItem(NEW_EXPOSURES)
+    if (data === null) {
+      return false
+    }
+
+    return JSON.parse(data)
+  } catch (e) {
+    console.error(e.message)
+    return false
+  }
+}
+
+export async function setUserHasNewExposuresData(
+  exposureStatus: boolean,
+): Promise<void> {
+  try {
+    setStoreData(NEW_EXPOSURES, exposureStatus)
+  } catch (e) {
+    console.error(e.message)
   }
 }

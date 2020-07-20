@@ -17,13 +17,13 @@ import {
   ExposureCalendarOptions,
   ExposureInfo,
 } from "./exposureHistory"
+import { StorageUtils } from "./utils"
 
 interface ExposureHistoryState {
   exposureHistory: ExposureHistory
   hasBeenExposed: boolean
   userHasNewExposure: boolean
   observeExposures: () => void
-  resetExposures: () => void
   getCurrentExposures: () => void
   lastExposureDetectionDate: Dayjs | null
 }
@@ -31,9 +31,8 @@ interface ExposureHistoryState {
 const initialState = {
   exposureHistory: [],
   hasBeenExposed: false,
-  userHasNewExposure: true,
+  userHasNewExposure: false,
   observeExposures: (): void => {},
-  resetExposures: (): void => {},
   getCurrentExposures: (): void => {},
   lastExposureDetectionDate: null,
 }
@@ -70,11 +69,11 @@ const ExposureHistoryProvider: FunctionComponent<ExposureHistoryProps> = ({
   children,
   exposureEventsStrategy,
 }) => {
+  const [userHasNewExposure, setUserHasNewExposure] = useState<boolean>(false)
   const { exposureInfoSubscription, toExposureHistory } = exposureEventsStrategy
   const [exposureHistory, setExposureHistory] = useState<ExposureHistory>(
     blankHistory,
   )
-  const [userHasNewExposure, setUserHasNewExposure] = useState<boolean>(false)
   const [
     lastExposureDetectionDate,
     setLastExposureDetectionDate,
@@ -87,6 +86,16 @@ const ExposureHistoryProvider: FunctionComponent<ExposureHistoryProps> = ({
           DateTimeUtils.posixToDayjs(exposureDetectionDate),
         )
     })
+  }, [])
+
+  const getExposureStatus = useCallback(async () => {
+    const exposureStatus = await StorageUtils.getNewExposuresData()
+    setUserHasNewExposure(exposureStatus)
+  }, [])
+
+  const setExposureStatus = useCallback(async (exposureStatus: boolean) => {
+    await StorageUtils.setUserHasNewExposuresData(exposureStatus)
+    setUserHasNewExposure(exposureStatus)
   }, [])
 
   const getCurrentExposures = useCallback(() => {
@@ -108,17 +117,20 @@ const ExposureHistoryProvider: FunctionComponent<ExposureHistoryProps> = ({
           blankHistoryConfig,
         )
         getLastExposureDetectionDate()
-
+        setExposureStatus(true)
         setExposureHistory(exposureHistory)
       },
     )
     getLastExposureDetectionDate()
+    getExposureStatus()
 
     return subscription.remove
   }, [
     exposureInfoSubscription,
     toExposureHistory,
     getLastExposureDetectionDate,
+    getExposureStatus,
+    setExposureStatus,
   ])
 
   useEffect(() => {
@@ -126,11 +138,7 @@ const ExposureHistoryProvider: FunctionComponent<ExposureHistoryProps> = ({
   }, [toExposureHistory, getCurrentExposures])
 
   const observeExposures = () => {
-    setUserHasNewExposure(false)
-  }
-
-  const resetExposures = () => {
-    setUserHasNewExposure(true)
+    setExposureStatus(false)
   }
 
   const hasBeenExposed = false
@@ -141,7 +149,6 @@ const ExposureHistoryProvider: FunctionComponent<ExposureHistoryProps> = ({
         hasBeenExposed,
         userHasNewExposure,
         observeExposures,
-        resetExposures,
         getCurrentExposures,
         lastExposureDetectionDate,
       }}

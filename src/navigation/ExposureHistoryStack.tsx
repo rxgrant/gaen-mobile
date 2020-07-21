@@ -4,8 +4,6 @@ import { useNavigation } from "@react-navigation/native"
 
 import ExposureHistoryContext from "../ExposureHistoryContext"
 import ExposureHistoryScreen from "../ExposureHistory/index"
-import NextSteps from "../ExposureHistory/NextSteps"
-import MoreInfo from "../ExposureHistory/MoreInfo"
 
 import { Screens } from "./index"
 
@@ -28,7 +26,6 @@ const ExposureHistoryStack: FunctionComponent = () => {
 
   return (
     <Stack.Navigator
-      mode="modal"
       screenOptions={{
         ...SCREEN_OPTIONS,
       }}
@@ -37,8 +34,6 @@ const ExposureHistoryStack: FunctionComponent = () => {
         name={Screens.ExposureHistory}
         component={ExposureHistoryScreen}
       />
-      <Stack.Screen name={Screens.NextSteps} component={NextSteps} />
-      <Stack.Screen name={Screens.MoreInfo} component={MoreInfo} />
     </Stack.Navigator>
   )
 }

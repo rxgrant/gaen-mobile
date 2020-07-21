@@ -15,18 +15,32 @@ import { Colors } from "../styles"
 
 const { GAEN_AUTHORITY_NAME: healthAuthorityName, AUTHORITY_ADVICE_URL } = env
 
+const CloseButton = () => {
+  const navigation = useNavigation()
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={styles.backIconContainer}
+    >
+      <SvgXml xml={Icons.Close} fill={Colors.quaternaryViolet} />
+    </TouchableOpacity>
+  )
+}
+
 const NextSteps = (): JSX.Element => {
   const navigation = useNavigation()
   const { t } = useTranslation()
-  useStatusBarEffect("light-content")
+  useStatusBarEffect("dark-content")
 
-  const footerText = t("exposure_history.next_steps.ha_self_assessment", {
-    healthAuthorityName,
-  })
+  const headerText = t("exposure_history.next_steps.maybe_exposed")
   const contentTextOne = t("exposure_history.next_steps.possible_crossed_paths")
   const contentTextTwo = t(
     "exposure_history.next_steps.possible_infection_precaution",
   )
+  const footerText = t("exposure_history.next_steps.ha_self_assessment", {
+    healthAuthorityName,
+  })
   const buttonText = t("exposure_history.next_steps.button_text")
 
   const handleOnPressTakeAssessment = () => {
@@ -36,28 +50,36 @@ const NextSteps = (): JSX.Element => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <RTLEnabledText style={styles.contentText}>
-          {contentTextOne}
-        </RTLEnabledText>
-        <RTLEnabledText style={styles.contentText}>
-          {contentTextTwo}
-        </RTLEnabledText>
-      </View>
-      <View style={styles.buttonContainer}>
-        <RTLEnabledText style={styles.footerText}>{footerText}</RTLEnabledText>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleOnPressTakeAssessment}
-        >
-          <RTLEnabledText style={styles.buttonText}>
-            {buttonText}
+    <>
+      <CloseButton />
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <RTLEnabledText style={styles.headerText}>
+            {headerText}
           </RTLEnabledText>
-          <SvgXml xml={Icons.Export} color={Colors.white} />
-        </TouchableOpacity>
+          <RTLEnabledText style={styles.contentText}>
+            {contentTextOne}
+          </RTLEnabledText>
+          <RTLEnabledText style={styles.contentText}>
+            {contentTextTwo}
+          </RTLEnabledText>
+        </View>
+        <View style={styles.buttonContainer}>
+          <RTLEnabledText style={styles.footerText}>
+            {footerText}
+          </RTLEnabledText>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleOnPressTakeAssessment}
+          >
+            <RTLEnabledText style={styles.buttonText}>
+              {buttonText}
+            </RTLEnabledText>
+            <SvgXml xml={Icons.Export} color={Colors.white} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </>
   )
 }
 
@@ -72,6 +94,9 @@ const styles = StyleSheet.create({
   footerText: {
     ...Typography.footer,
     marginBottom: Spacing.medium,
+  },
+  headerText: {
+    ...Typography.header3,
   },
   contentText: {
     ...Typography.mainContent,
@@ -88,6 +113,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...Typography.buttonTextLight,
+  },
+  backIconContainer: {
+    marginTop: Spacing.medium,
+    padding: Spacing.medium,
+    alignItems: "flex-end",
   },
 })
 

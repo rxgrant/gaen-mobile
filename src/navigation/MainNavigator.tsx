@@ -8,8 +8,10 @@ import { NavigationContainer } from "@react-navigation/native"
 import MainTabNavigator from "./MainTabNavigator"
 import OnboardingStack from "./OnboardingStack"
 import { useOnboardingContext } from "../OnboardingContext"
-import { Stacks } from "./index"
+import { Screens, Stacks } from "./index"
 import AffectedUserStack from "../AffectedUserFlow"
+import MoreInfo from "../ExposureHistory/MoreInfo"
+import NextSteps from "../ExposureHistory/NextSteps"
 
 const Stack = createStackNavigator()
 
@@ -30,7 +32,17 @@ const MainNavigator: FunctionComponent = () => {
         <Stack.Screen
           name={Stacks.AffectedUserStack}
           component={AffectedUserStack}
-          options={TransitionPresets.ModalTransition}
+          options={{ ...TransitionPresets.ModalTransition }}
+        />
+        <Stack.Screen
+          name={Screens.MoreInfo}
+          component={MoreInfo}
+          options={{ ...TransitionPresets.ModalTransition }}
+        />
+        <Stack.Screen
+          name={Screens.NextSteps}
+          component={NextSteps}
+          options={{ ...TransitionPresets.ModalTransition }}
         />
       </Stack.Navigator>
     </NavigationContainer>

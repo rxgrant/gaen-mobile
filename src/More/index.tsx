@@ -31,32 +31,6 @@ const SCREEN_OPTIONS: StackNavigationOptions = {
   headerTintColor: Colors.white,
 }
 
-type MoreStackRouteName =
-  | "Settings"
-  | "About"
-  | "Licenses"
-  | "ENDebugMenu"
-  | "LanguageSelection"
-  | "AffectedUserFlow"
-  | "ExposureListDebugScreen"
-  | "ENLocalDiagnosisKey"
-
-interface MoreStackRouteState {
-  index: number
-  key: string
-  routeNames: MoreStackRouteName[]
-  routes: MoreStackRoute[]
-  stale: boolean
-  type: "stack"
-}
-
-export interface MoreStackRoute {
-  key: string
-  name: "More"
-  params: undefined
-  state?: MoreStackRouteState
-}
-
 const MoreStack: FunctionComponent = () => {
   const { t } = useTranslation()
 

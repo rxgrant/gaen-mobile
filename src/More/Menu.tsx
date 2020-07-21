@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FunctionComponent } from "react"
 import {
   ViewStyle,
   View,
@@ -22,7 +22,7 @@ import { Stacks, Screens, useStatusBarEffect } from "../navigation"
 import { Icons } from "../assets"
 import { Buttons, Colors, Spacing, Typography } from "../styles"
 
-interface SettingsScreenProps {
+interface MenuScreenProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
@@ -57,7 +57,7 @@ const LanguageSelectionListItem = ({
   </TouchableHighlight>
 )
 
-const SettingsScreen = ({ navigation }: SettingsScreenProps): JSX.Element => {
+const MenuScreen: FunctionComponent<MenuScreenProps> = ({ navigation }) => {
   const {
     t,
     i18n: { language: localeCode },
@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SettingsScreen
+export default MenuScreen
